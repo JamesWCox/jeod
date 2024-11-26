@@ -17,7 +17,23 @@
 #   TRICK_VER             variables is just a partial list of those required by
 #   TRICK_HOST_CPU        Trick. Please refer to Trick documentation for details.
 
-JEOD_HOME=$(HOME)/dev-nasa/jeod
+
+#TRICK_HOME=$(HOME)/nasa/Trick
+#export TRICK_HOME=$HOME/trick
+#export JEOD_HOME=$HOME/jeod/jeod
+TRICK_HOME=$(HOME)/trick
+export TRICK_HOME #=$(TRICK_HOME) 
+TRICK_VER=19
+TRICK_SOURCE=$(TRICK_HOME)/trick_source
+TRICK_CFLAGS=
+ER7_UTILS_HOME=$(TRICK_SOURCE)/er7_utils
+#--------
+
+#
+#JEOD_HOME=../jeod
+JEOD_HOME=$(HOME)/jeod/jeod
+export JEOD_HOME #=$(JEOD_HOME)
+include $(JEOD_HOME)/bin/jeod/generic_S_overrides.mk
 JEOD_LIBDIR=$(JEOD_HOME)/lib
 JEOD_MODELS=$(JEOD_HOME)/models
 $(info JEOD_HOME=$(JEOD_HOME))
@@ -28,21 +44,16 @@ $(info JEOD_MODELS=$(JEOD_MODELS))
 DEFS:=
 DEFS+=-DJEOD_UNIT_TEST
 
-TRICK_HOME=$(HOME)/nasa/trick
-TRICK_SOURCE=$(TRICK_HOME)/trick_source
-TRICK_CFLAGS=
-ER7_UTILS_HOME=$(TRICK_SOURCE)/er7_utils
-#--------
 CONFIG_CFLAGS=
 COMMON_CFLAGS = $(TRICK_CFLAGS) $(ER7_UTILS_HOME)
 GCOV_CFLAGS = 
-COMPILE_FLAGS = -I$(JEOD_HOME)/tools \
+COMPILE_FLAGS = -I$(JEOD_HOME) -I$(JEOD_MODELS) -I$(JEOD_HOME)/tools \
 				$(CONFIG_CFLAGS) $(COMMON_CFLAGS) #$(GCOV_CFLAGS)
 LINK_LIBS = -L$(JEOD_LIBDIR) -ljeod -lpthread 
-#BUILD_OPTS = $(COMPILE_FLAGS) $(LINK_LIBS)
+BUILD_OPTS = $(COMPILE_FLAGS) $(LINK_LIBS)
 .PHONY: all demo
 all: demo
 
 demo:
 	@echo fuck this
-	g++ main.cpp dynamics_init_only.h vehicle_basic.h -o demo $(BUILD_OPTS)
+	g++  main.cpp dynamics_init_only.h vehicle_basic.h -o demo $(BUILD_OPTS)
