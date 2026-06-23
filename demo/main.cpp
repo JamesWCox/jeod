@@ -2,15 +2,14 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+//#include "sim_objects/default_trick_sys.sm"
 
 /*
 TODO Deets of S_define example 
-
-
 */
 
 
-#include "environment/time/include/time_manager.hh"
+// #include "environment/time/include/time_manager.hh"
 //#include "environment/time/include/time_manager_init.hh"
 
 //#include "environment/time/include/time_tai.hh"
@@ -40,37 +39,37 @@ public:
 };
 
 
-#include "dynamics_init_only.h"
+//#include "dynamics_init_only.h"
 
 //#include "Base/vehicle_baseline.sm"
-#include "vehicle_basic.h"
+//#include "vehicle_basic.h"
 class S_define_runner {
-public:
-#define DYNAMICS       0.5
-#define CALENDAR_INTERVAL 1.0
-// Include the default system classes:
-// #include "sim_objects/default_trick_sys.sm"
+    public:
+    #define DYNAMICS       0.5
+    #define CALENDAR_INTERVAL 1.0
+    // Include the default system classes:
+    // #include "sim_objects/default_trick_sys.sm"
 
-// Include the default jeod object
-// #include "jeod_sys.sm"
+    // Include the default jeod object
+    // #include "jeod_sys.sm"
 
-// Define the phase initialization priorities.
-// #include "default_priority_settings.sm"
+    // Define the phase initialization priorities.
+    // #include "default_priority_settings.sm"
 
-    S_JeodTimeSimObject jeod_time;
+    // S_JeodTimeSimObject jeod_time;
 
-// Include the most basic dynamics class and object
-// #include "dynamics_init_only.sm" // OG
-// DynamicsInitSimObject dynamics(jeod_time.time_manager);
-S_DynamicsInitSimObject dynamics;
+    // Include the most basic dynamics class and object
+    // #include "dynamics_init_only.sm" // OG
+    // DynamicsInitSimObject dynamics(jeod_time.time_manager);
+    // S_DynamicsInitSimObject dynamics;
 
-// Include a basic vehicle class and object
-// #include "vehicle_basic.sm" // OG
-S_VehicleBasicSimObject vehicle;
+    // Include a basic vehicle class and object
+    // #include "vehicle_basic.sm" // OG
+    // S_VehicleBasicSimObject vehicle;
 
     // S_define_runner() : jeod_time, dynamics(jeod_time.time_manager), vehicle(dynamics.dyn_manager) {}
-    S_define_runner() : jeod_time(), dynamics(), vehicle() {}
-    ~S_define_runner(){}
+    S_define_runner() {}
+    ~S_define_runner() {}
 
     int init() {
         return 0;

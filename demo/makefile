@@ -18,22 +18,28 @@
 #   TRICK_HOST_CPU        Trick. Please refer to Trick documentation for details.
 
 
-#TRICK_HOME=$(HOME)/nasa/Trick
-#export TRICK_HOME=$HOME/trick
-#export JEOD_HOME=$HOME/jeod/jeod
 TRICK_HOME=$(HOME)/trick
 export TRICK_HOME #=$(TRICK_HOME) 
 TRICK_VER=19
 TRICK_SOURCE=$(TRICK_HOME)/trick_source
 TRICK_CFLAGS=
 ER7_UTILS_HOME=$(TRICK_SOURCE)/er7_utils
+$(info TRICK_HOME=$(TRICK_HOME))
+$(info TRICK_SOURCE=$(TRICK_SOURCE))
+$(info ER7_UTILS_HOME=$(ER7_UTILS_HOME))
 #--------
 
-#
-#JEOD_HOME=../jeod
-JEOD_HOME=$(HOME)/jeod/jeod
-export JEOD_HOME #=$(JEOD_HOME)
-include $(JEOD_HOME)/bin/jeod/generic_S_overrides.mk
+JEOD_HOME ?= $(realpath $(CURDIR)/../jeod/)
+
+# Generalized S_override.mk file
+# Sets trick compilation flags and builds ephemeris binary files
+#include $(JEOD_HOME)/bin/jeod/generic_S_overrides.mk
+TRICK_CFLAGS += -g
+TRICK_CXXFLAGS += -g
+
+#JEOD_HOME=$(HOME)/jeod/jeod
+export JEOD_HOME
+#include $(JEOD_HOME)/bin/jeod/generic_S_overrides.mk
 JEOD_LIBDIR=$(JEOD_HOME)/lib
 JEOD_MODELS=$(JEOD_HOME)/models
 $(info JEOD_HOME=$(JEOD_HOME))
@@ -45,15 +51,20 @@ DEFS:=
 DEFS+=-DJEOD_UNIT_TEST
 
 CONFIG_CFLAGS=
-COMMON_CFLAGS = $(TRICK_CFLAGS) $(ER7_UTILS_HOME)
+COMMON_CFLAGS = $(TRICK_CFLAGS) 
+#COMMON_CFLAGS += $(ER7_UTILS_HOME)
 GCOV_CFLAGS = 
 COMPILE_FLAGS = -I$(JEOD_HOME) -I$(JEOD_MODELS) -I$(JEOD_HOME)/tools \
 				$(CONFIG_CFLAGS) $(COMMON_CFLAGS) #$(GCOV_CFLAGS)
-LINK_LIBS = -L$(JEOD_LIBDIR) -ljeod -lpthread 
+LINK_LIBS = -L$(JEOD_LIBDIR) 
+#LINK_LIBS += -ljeod -lpthread 
 BUILD_OPTS = $(COMPILE_FLAGS) $(LINK_LIBS)
-.PHONY: all demo
+
+.PHONY: all demo 
 all: demo
 
 demo:
-	@echo fuck this
-	g++  main.cpp dynamics_init_only.h vehicle_basic.h -o demo $(BUILD_OPTS)
+	g++  main.cpp  -o bin/demo $(BUILD_OPTS)
+#	g++  main.cpp dynamics_init_only.h vehicle_basic.h -o demo $(BUILD_OPTS)
+
+
